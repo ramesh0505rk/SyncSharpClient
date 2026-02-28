@@ -1,1 +1,57 @@
-<p>sign-up works!</p>
+<div class="signup-container">
+    <div class="signup-card d-flex flex-column gap-4 position-relative justify-content-center">
+        <div class="content-header d-flex justify-content-between align-items-center">
+            <h1 class="logo-text">Sync#</h1>
+            <div class="d-flex signin-btn-container" (click)="onSignIn()" style="cursor: pointer;">
+                <a class="signin-btn">Sign In</a>
+                <img alt="Arrow Right Icon" class="arrow-icon">
+            </div>
+        </div>
+        <div class="content-area d-flex flex-column gap-3">
+            <div>
+                <h3 style="font-weight:700;">Sign Up</h3>
+                <small style="color: gray;font-style: italic;">Please create an account to continue</small>
+            </div>
+            <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+                <div class="form-floating mb-3">
+                    <input type="text" formControlName="firstName" class="form-control" id="floatingFirstName"
+                        placeholder="name@example.com">
+                    <label for="floatingFirstName">* First Name</label>
+                    <div *ngIf="signUpForm.get('firstName')?.invalid && signUpForm.get('firstName')?.touched"
+                        class="text-danger pt-2 small">
+                        Please enter a valid first name.
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" formControlName="lastName" class="form-control" id="floatingLastName"
+                        placeholder="name@example.com">
+                    <label for="floatingLastName">Last Name</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="email" formControlName="email" class="form-control" id="floatingEmail"
+                        placeholder="name@example.com">
+                    <label for="floatingEmail">* Email address</label>
+                    <div *ngIf="signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched"
+                        class="text-danger pt-2 small">
+                        Please enter a valid email address.
+                    </div>
+                </div>
+                <div class="form-floating">
+                    <input [type]="isPasswordVisible ? 'text' : 'password'" formControlName="password"
+                        class="form-control" id="floatingPassword" placeholder="Password">
+                    <label for="floatingPassword">* Password</label>
+                    <img *ngIf="!isPasswordVisible" class="eye-img" src="assets/icons/eye-close.svg"
+                        (click)="togglePasswordVisibility()">
+                    <img *ngIf="isPasswordVisible" class="eye-img" src="assets/icons/eye-open.svg"
+                        (click)="togglePasswordVisibility()">
+                </div>
+                <div *ngIf="signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched"
+                    class="text-danger pt-2 small">
+                    Password must be at least 6 characters long.
+                </div>
+                <button type="submit" style="background-color: #1d791d;" class="btn btn-success w-100 mt-4">Sign
+                    Up</button>
+            </form>
+        </div>
+    </div>
+</div>

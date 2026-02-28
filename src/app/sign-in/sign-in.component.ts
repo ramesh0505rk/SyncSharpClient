@@ -1,18 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sign-in',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss'
 })
 export class SignInComponent implements OnInit {
 
   signInForm!: FormGroup;
+  isPasswordVisible: boolean = false;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private router: Router) { }
 
 
   ngOnInit(): void {
@@ -21,12 +24,23 @@ export class SignInComponent implements OnInit {
 
   initializeForm() {
     this.signInForm = this.fb.group({
-      userName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      userName: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]]
     })
   }
 
-  onSubmit() {
+  onSignUp() {
+    this.router.navigate(['/signup']);
+  }
 
+  onSubmit() {
+    if (this.signInForm.invalid) {
+      this.signInForm.markAllAsTouched();
+      return;
+    }
+  }
+
+  togglePasswordVisibility(){
+    this.isPasswordVisible = !this.isPasswordVisible;
   }
 }

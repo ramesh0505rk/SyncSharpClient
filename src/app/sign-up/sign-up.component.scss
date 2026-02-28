@@ -1,0 +1,99 @@
+@import "../../assets/styles/commonStyles.scss";
+
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #EBEDEE;
+    overflow: auto;
+}
+
+// .content-header {
+//     position: absolute;
+//     left: 0;
+//     top: 0;
+//     width: 100%;
+//     padding: 3rem;
+// }
+
+.signup-card {
+    width: 35%;
+    min-height: 80vh;
+    border-radius: 1.5rem;
+    background: rgba(255, 255, 255);
+    border: 1px solid rgb(29, 121, 29, 0.5);
+    box-sizing: border-box;
+    padding: 3rem;
+
+    .logo-text {
+        font-family: "Bitcount Grid Double", system-ui;
+        font-weight: 400;
+        font-style: italic;
+        color: $primary-color;
+    }
+
+    input {
+        &:focus {
+            border: 1px solid $primary-color;
+            box-shadow: 0 0 0 .25rem rgba(29, 121, 29, 0.3);
+        }
+
+        &:focus+label {
+            color: $primary-color;
+        }
+    }
+}
+
+.btn-success {
+    background-color: $primary-color;
+    font-weight: 700;
+    transition: 0.2s background-color ease-in-out;
+    border: none;
+
+    &:hover {
+        background-color: #1d791dde !important;
+    }
+}
+
+.eye-img {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.5rem;
+    height: 1.5rem;
+    cursor: pointer;
+}
+
+.signin-btn-container {
+    &:hover .signin-btn {
+        color: $primary-color;
+        transform: translateX(-3px);
+    }
+
+    &:hover .arrow-icon {
+        background-color: $primary-color;
+        border-radius: 50%;
+        content: $right-arrow-white;
+    }
+
+    &:hover {
+        transform: translateX(-3px);
+    }
+
+    transition: 0.3s transform ease-in-out;
+}
+
+.signin-btn {
+    color: #000000;
+    text-decoration: none;
+    transition: 0.3s color ease-in-out, 0.3s transform ease-in-out;
+}
+
+.arrow-icon {
+    width: 1.5rem;
+    transition: 0.3s all ease-in-out;
+    content: $right-arrow;
+}
