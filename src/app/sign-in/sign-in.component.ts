@@ -40,7 +40,11 @@ export class SignInComponent implements OnInit {
     }
   }
 
-  togglePasswordVisibility(){
+  togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;
+  }
+
+  onForgotPasswordClicked() {
+
   }
 }

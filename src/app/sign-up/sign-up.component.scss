@@ -6,54 +6,49 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background-color: #EBEDEE;
+    background-color: #111111;
     overflow: auto;
 }
 
-// .content-header {
-//     position: absolute;
-//     left: 0;
-//     top: 0;
-//     width: 100%;
-//     padding: 3rem;
-// }
-
 .signup-card {
     width: 35%;
-    min-height: 80vh;
+    min-height: 85vh;
     border-radius: 1.5rem;
-    background: rgba(255, 255, 255);
-    border: 1px solid rgb(29, 121, 29, 0.5);
+    background: #1e1e1e;
+    border: 0.1px solid rgb(128, 128, 128, 0.2);
     box-sizing: border-box;
     padding: 3rem;
 
     .logo-text {
-        font-family: "Bitcount Grid Double", system-ui;
-        font-weight: 400;
+        color: transparent;
+        background: linear-gradient(45deg, #f8aac0, #a6aaf8);
+        background-clip: text;
+        font-weight: 900;
         font-style: italic;
-        color: $primary-color;
     }
 
     input {
+        border: 0.1px solid rgb(128, 128, 128, 0.2);
         &:focus {
-            border: 1px solid $primary-color;
-            box-shadow: 0 0 0 .25rem rgba(29, 121, 29, 0.3);
+            box-shadow: none;
         }
 
-        &:focus+label {
-            color: $primary-color;
+        &:focus + label {
+            //later
         }
     }
 }
 
 .btn-success {
-    background-color: $primary-color;
+    // background-color: #83a4ff;
+    background: linear-gradient(45deg, #f8aac0, #a6aaf8);
     font-weight: 700;
-    transition: 0.2s background-color ease-in-out;
+    transition: 0.3s all ease-in-out;
+    padding: 16px 12px;
     border: none;
 
     &:hover {
-        background-color: #1d791dde !important;
+        // background-color: #1d791dde !important;
     }
 }
 
@@ -67,33 +62,11 @@
     cursor: pointer;
 }
 
-.signin-btn-container {
-    &:hover .signin-btn {
-        color: $primary-color;
-        transform: translateX(-3px);
-    }
-
-    &:hover .arrow-icon {
-        background-color: $primary-color;
-        border-radius: 50%;
-        content: $right-arrow-white;
-    }
+.signin-btn {
+    color: #ffffff;
+    text-decoration: none;
 
     &:hover {
-        transform: translateX(-3px);
+        text-decoration: underline;
     }
-
-    transition: 0.3s transform ease-in-out;
-}
-
-.signin-btn {
-    color: #000000;
-    text-decoration: none;
-    transition: 0.3s color ease-in-out, 0.3s transform ease-in-out;
-}
-
-.arrow-icon {
-    width: 1.5rem;
-    transition: 0.3s all ease-in-out;
-    content: $right-arrow;
 }
