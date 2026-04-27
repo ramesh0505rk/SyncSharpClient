@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { UserService } from '../services/user.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -15,7 +17,7 @@ export class SignInComponent implements OnInit {
   signInForm!: FormGroup;
   isPasswordVisible: boolean = false;
 
-  constructor(private fb: FormBuilder, private router: Router) { }
+  constructor(private fb: FormBuilder, private router: Router, private userService: UserService, private authService: AuthService) { }
 
 
   ngOnInit(): void {
@@ -38,6 +40,18 @@ export class SignInComponent implements OnInit {
       this.signInForm.markAllAsTouched();
       return;
     }
+
+    const { email, password } = this.signInForm.value;
+
+    this.userService.getTokenBySignIn(email, password).subscribe({
+      next: (res: any) => {
+        localStorage.setItem('accessToken', res.accessToken);
+      },
+      error: (err: any) => {
+
+      }
+    })
+
   }
 
   togglePasswordVisibility() {
