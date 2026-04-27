@@ -41,11 +41,13 @@ export class SignInComponent implements OnInit {
       return;
     }
 
-    const { email, password } = this.signInForm.value;
+    const { userName, password } = this.signInForm.value;
 
-    this.userService.getTokenBySignIn(email, password).subscribe({
+    this.userService.getTokenBySignIn(userName, password).subscribe({
       next: (res: any) => {
         localStorage.setItem('accessToken', res.accessToken);
+        this.authService.checkAuthStatus();
+        this.router.navigate(['/home']);
       },
       error: (err: any) => {
 
