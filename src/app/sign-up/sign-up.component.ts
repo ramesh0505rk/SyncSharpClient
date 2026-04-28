@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { last } from 'rxjs';
+import { UserService } from '../services/user.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -15,7 +17,7 @@ export class SignUpComponent {
   signUpForm!: FormGroup;
   isPasswordVisible: boolean = false;
 
-  constructor(private fb: FormBuilder, private router: Router) { }
+  constructor(private fb: FormBuilder, private router: Router, private userService: UserService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -30,19 +32,31 @@ export class SignUpComponent {
     })
   }
 
-  togglePasswordVisibility(){
+  togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;
   }
 
-  onSubmit(){
-    if(this.signUpForm.invalid){
+  onSubmit() {
+    if (this.signUpForm.invalid) {
       this.signUpForm.markAllAsTouched();
       return;
     }
-    console.log(this.signUpForm.get('firstName')?.value, this.signUpForm.get('lastName')?.value, this.signUpForm.get('email')?.value, this.signUpForm.get('password')?.value);
+
+    const { firstName, lastName, email, password } = this.signUpForm.value;
+    this.userService.getTokenBySignUp(firstName, lastName, email, password).subscribe({
+      next: (res: any) => {
+        localStorage.setItem('accessToken',res.accessToken);
+        this.authService.checkAuthStatus();
+        this.router.navigate(['/home']);
+      },
+      error: (err: any) => {
+
+      }
+    })
+
   }
 
-  onSignIn(){
+  onSignIn() {
     this.router.navigate(['/signin']);
   }
 }
