@@ -1,10 +1,48 @@
-.top-bar{
-    height: 10vh;
+.home-container {
+    background-color: var(--primary-background);
+    height: 100vh;
+    overflow: auto;
+    color: var(--primary-text-color);
 }
 
-.top-bar-inner{
+.top-bar {
+    height: 14vh;
+    background-color: transparent;
+    position: fixed;
+}
+
+.top-bar-inner {
     width: 80%;
     height: 10vh;
-    background-color: red;
     border-radius: 15px;
+
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgb(128, 128, 128, 0.2);
+    padding: 1rem;
+}
+
+.logo-text {
+    color: transparent;
+    background: linear-gradient(45deg, #f8aac0, #a6aaf8);
+    background-clip: text;
+    font-weight: 900;
+    font-style: italic;
+}
+
+.nav-container {
+    border: 1px solid rgb(128, 128, 128, 0.2);
+    position: relative;
+    border-radius: 999px;
+    padding: 4px;
+    gap: 0;
+}
+
+#bubble {
+    background: rgba(255, 255, 255, 0.015);
+    backdrop-filter: blur(6px);
+}
+
+.main-content {
+    margin-top: 14vh;
 }
