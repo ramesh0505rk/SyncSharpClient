@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription, timer } from 'rxjs';
+import { UserDetails, UserDetailsService } from './user-details.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class AuthService {
   private tokenExpirationTimer: Subscription | null = null;
   public isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private userDetailsService: UserDetailsService) {
     this.checkAuthStatus();
   }
 
@@ -20,7 +21,7 @@ export class AuthService {
       this.isAuthenticatedSubject.next(isValid);
 
       if (isValid) {
-        this.setAutoLogout(token);
+        this.setAutoLogoutAndUserDetails(token);
       }
       else {
         this.logout();
@@ -45,7 +46,7 @@ export class AuthService {
     }
   }
 
-  setAutoLogout(token: string) {
+  setAutoLogoutAndUserDetails(token: string) {
     if (this.tokenExpirationTimer)
       this.tokenExpirationTimer.unsubscribe();
 
@@ -55,6 +56,15 @@ export class AuthService {
       const expirationTime = payload.exp * 1000;
 
       const timeUntilExpire = expirationTime - Date.now();
+
+      const userDetails: UserDetails = {
+        UserID: payload.UserID,
+        FirstName: payload.FirstName,
+        LastName: payload.LastName,
+        Email: payload.Email
+      }
+
+      this.userDetailsService.setUserDetails(userDetails);
 
       if (timeUntilExpire <= 0) {
         this.logout();
@@ -74,6 +84,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem('accessToken');
     this.isAuthenticatedSubject.next(false);
+    this.userDetailsService.setUserDetails(null);
 
     if (this.tokenExpirationTimer) {
       this.tokenExpirationTimer.unsubscribe();

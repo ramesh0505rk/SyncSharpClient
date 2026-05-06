@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserDetails, UserDetailsService } from '../services/user-details.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -11,6 +13,11 @@ export class HomeComponent implements OnInit {
 
   private btns!: NodeListOf<HTMLButtonElement>;
   private bubble!: HTMLElement | null;
+  userDetails: UserDetails | null = null;
+  profileLetter: string = '';
+
+  constructor(private userDetailsService: UserDetailsService, private router: Router) {
+  }
 
   ngOnInit(): void {
     this.btns = document.querySelectorAll('.tab-btn');
@@ -22,6 +29,12 @@ export class HomeComponent implements OnInit {
 
     window.addEventListener('load', () => { this.moveBubble(0) });
     setTimeout(() => this.moveBubble(0), 50);
+
+    // Subscribe to user details
+    this.userDetailsService.userDetails$.subscribe(details => {
+      this.userDetails = details;
+      this.profileLetter = this.userDetails?.FirstName.charAt(0).toUpperCase() || '';
+    });
   }
 
   moveBubble(index: number) {
@@ -37,5 +50,9 @@ export class HomeComponent implements OnInit {
       b.style.fontWeight = i === index ? '500' : '400';
       b.style.color = i === index ? '#FFFFFF' : '#FBFBFB';
     })
+  }
+
+  onClickSyncSharp() {
+    this.router.navigate(['/']);
   }
 }
