@@ -11,8 +11,8 @@ export class UserService {
   restApiUrl: string = environment.restApiUrl;
   constructor(private readonly http: HttpClient) { }
 
-  getTokenBySignIn(Email: string, Password: string) {
-    var request = { Email, Password };
+  getTokenBySignIn(UserName: string, Password: string) {
+    var request = { UserName, Password };
 
     return this.http.post(`${this.restApiUrl}/User/SignIn`, request)
       .pipe(
@@ -22,8 +22,8 @@ export class UserService {
       )
   }
 
-  getTokenBySignUp(FirstName: string, LastName: string, Email: string, Password: string) {
-    var request = { FirstName, LastName, Email, Password };
+  getTokenBySignUp(UserName: string, FirstName: string, LastName: string, Email: string, Password: string) {
+    var request = { UserName, FirstName, LastName, Email, Password };
 
     return this.http.post(`${this.restApiUrl}/User/SignUp`, request)
       .pipe(
@@ -31,5 +31,14 @@ export class UserService {
           return throwError(() => err);
         })
       )
+  }
+
+  userNameExists(UserName: string) {
+    return this.http.get(`${this.restApiUrl}/User/Exists?UserName=${UserName}`)
+      .pipe(
+        catchError(err => {
+          return throwError(() => err);
+        })
+      );
   }
 }

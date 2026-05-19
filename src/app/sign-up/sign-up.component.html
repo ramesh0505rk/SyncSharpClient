@@ -12,7 +12,20 @@
                 <small style="color: #ffffffc4;font-style: italic;">Please create an account to continue</small>
             </div>
             <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
-                <div class="form-floating mb-3">
+                <div class="form-floating" style="position: relative;">
+                    <input type="text" formControlName="userName" class="form-control" id="floatingUserName"
+                        placeholder="name@example.com">
+                    <label for="floatingUserName">* User Name</label>
+                    <div *ngIf="isCheckingUserName" class="loader" style="position: absolute;"></div>
+                </div>
+                <div *ngIf="signUpForm.get('userName')?.invalid && signUpForm.get('userName')?.touched"
+                    class="pt-2 small" style="color: #ffffffc4;">
+                    Please enter a valid user name.
+                </div>
+                <div *ngIf="userNameTaken" class="pt-2 small" style="color: #f8aac0;">
+                    This username is already taken.
+                </div>
+                <div class="form-floating mt-3 mb-3">
                     <input type="text" formControlName="firstName" class="form-control" id="floatingFirstName"
                         placeholder="name@example.com">
                     <label for="floatingFirstName">* First Name</label>
@@ -30,8 +43,8 @@
                     <input type="email" formControlName="email" class="form-control" id="floatingEmail"
                         placeholder="name@example.com">
                     <label for="floatingEmail">* Email address</label>
-                    <div *ngIf="signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched"
-                        class="pt-2 small" style="color: #ffffffc4;">
+                    <div *ngIf="signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched" class="pt-2 small"
+                        style="color: #ffffffc4;">
                         Please enter a valid email address.
                     </div>
                 </div>

@@ -16,6 +16,7 @@ export class UserDetailsService {
 
 export interface UserDetails {
   UserID: string;
+  UserName: string;
   FirstName: string;
   LastName: string;
   Email: string;

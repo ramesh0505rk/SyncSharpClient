@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { last } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, switchMap, tap, Subscription } from 'rxjs';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
 
@@ -13,18 +13,27 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss'
 })
-export class SignUpComponent {
+export class SignUpComponent implements OnDestroy {
   signUpForm!: FormGroup;
   isPasswordVisible: boolean = false;
+  isCheckingUserName: boolean = false;
+  userNameTaken: boolean = false;
+  private userNameSub?: Subscription;
 
   constructor(private fb: FormBuilder, private router: Router, private userService: UserService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.initializeForm();
+    this.listenToUserNameChanges();
+  }
+
+  ngOnDestroy(): void {
+    this.userNameSub?.unsubscribe();
   }
 
   initializeForm() {
     this.signUpForm = this.fb.group({
+      userName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(25), Validators.pattern('^[a-zA-Z][a-zA-Z0-9_.-]*$')]],
       firstName: ['', [Validators.required, Validators.minLength(3)]],
       lastName: ['', []],
       email: ['', [Validators.required, Validators.email]],
@@ -32,20 +41,41 @@ export class SignUpComponent {
     })
   }
 
+  listenToUserNameChanges() {
+    this.userNameSub = this.signUpForm.get('userName')!.valueChanges.pipe(
+      tap(val=> { this.isCheckingUserName = val?.length >= 3; }),
+      debounceTime(400),
+      distinctUntilChanged(),
+      tap(val => {
+        this.userNameTaken = false;
+      }),
+      filter(val => val && val.length >= 3),
+      switchMap(val => this.userService.userNameExists(val))
+    ).subscribe({
+      next: (res: any) => {
+        this.isCheckingUserName = false;
+        this.userNameTaken = !!res;
+      },
+      error: () => {
+        this.isCheckingUserName = false;
+      }
+    });
+  }
+
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;
   }
 
   onSubmit() {
-    if (this.signUpForm.invalid) {
+    if (this.signUpForm.invalid || this.userNameTaken) {
       this.signUpForm.markAllAsTouched();
       return;
     }
 
-    const { firstName, lastName, email, password } = this.signUpForm.value;
-    this.userService.getTokenBySignUp(firstName, lastName, email, password).subscribe({
+    const { userName, firstName, lastName, email, password } = this.signUpForm.value;
+    this.userService.getTokenBySignUp(userName, firstName, lastName, email, password).subscribe({
       next: (res: any) => {
-        localStorage.setItem('accessToken',res.accessToken);
+        localStorage.setItem('accessToken', res.accessToken);
         this.authService.checkAuthStatus();
         this.router.navigate(['/home']);
       },
@@ -53,7 +83,6 @@ export class SignUpComponent {
 
       }
     })
-
   }
 
   onSignIn() {

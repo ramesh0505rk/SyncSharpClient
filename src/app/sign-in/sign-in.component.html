@@ -13,12 +13,12 @@
             </div>
             <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
                 <div class="form-floating mb-3">
-                    <input type="email" formControlName="userName" class="form-control" id="floatingInput"
-                        placeholder="name@example.com">
-                    <label for="floatingInput">* Email address</label>
+                    <input type="text" formControlName="userName" class="form-control" id="floatingInput"
+                        placeholder="Username">
+                    <label for="floatingInput">* Username</label>
                     <div *ngIf="signInForm.get('userName')?.invalid && signInForm.get('userName')?.touched"
                         class="pt-2 small" style="color: #ffffffc4;">
-                        Please enter a valid email address.
+                        Please enter a valid username.
                     </div>
                 </div>
                 <div class="form-floating">

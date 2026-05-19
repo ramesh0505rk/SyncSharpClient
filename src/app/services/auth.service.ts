@@ -59,6 +59,7 @@ export class AuthService {
 
       const userDetails: UserDetails = {
         UserID: payload.UserID,
+        UserName: payload.UserName,
         FirstName: payload.FirstName,
         LastName: payload.LastName,
         Email: payload.Email
