@@ -131,4 +131,21 @@ export class WorkRealtimeService {
     this.hubConnection.invoke('UpdateCursor', workID, cursorPosition, lineNumber)
       .catch(err => console.error('Error while updating cursor position: ', err));
   }
+
+  // Leave work
+  public leaveWork(workID: string, userID: string, username: string) {
+    if (!this.isConnected) return;
+
+    this.hubConnection.invoke('LeaveWork', workID, userID, username)
+      .catch(err => console.error('Error while leaving work: ', err));
+  }
+
+  // Stop connection
+  public stopConnection() {
+    if (this.hubConnection) {
+      this.hubConnection.stop();
+      this.isConnected = false;
+      console.log('SignalR connection stopped');
+    }
+  }
 }
