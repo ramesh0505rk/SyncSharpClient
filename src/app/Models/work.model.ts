@@ -1,12 +1,13 @@
 export interface Work {
-    WorkID: string;
-    Title: string;
-    Description: string
-    Code: string;
-    Language: string;
-    CreatedBy: string;
-    CreatedAt: Date;
-    LastModified: Date;
+    workID: string;
+    title: string;
+    description: string
+    code: string;
+    language: string;
+    createdBy: string;
+    createdAt: Date;
+    lastModified: Date;
+    activeUsersCount: number;
 }
 
 export interface CreateWork {
@@ -37,4 +38,11 @@ export interface ActiveUser {
     userID: string;
     username: string;
     connectionID: string;
+}
+
+export interface GeneralResponse<T> {
+    data: T;
+    success: boolean;
+    requestId: string;
+    responseMessage: string;
 }

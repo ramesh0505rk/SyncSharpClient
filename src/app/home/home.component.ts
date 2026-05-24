@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { UserDetails, UserDetailsService } from '../services/user-details.service';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [RouterOutlet],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -31,10 +31,8 @@ export class HomeComponent implements OnInit {
     setTimeout(() => this.moveBubble(0), 50);
 
     // Subscribe to user details
-    this.userDetailsService.userDetails$.subscribe(details => {
-      this.userDetails = details;
-      this.profileLetter = this.userDetails?.FirstName.charAt(0).toUpperCase() || '';
-    });
+    this.userDetails = this.userDetailsService.userDetails;
+    this.profileLetter = this.userDetails?.FirstName.charAt(0).toUpperCase() || '';
   }
 
   moveBubble(index: number) {

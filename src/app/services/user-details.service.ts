@@ -5,12 +5,10 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class UserDetailsService {
-
-  private userDetailsSubject: BehaviorSubject<UserDetails | null> = new BehaviorSubject<UserDetails | null>(null);
-  userDetails$ = this.userDetailsSubject.asObservable();
+  userDetails: UserDetails | null = null;
 
   setUserDetails(details: UserDetails | null) {
-    this.userDetailsSubject.next(details);
+    this.userDetails = details;
   }
 }
 

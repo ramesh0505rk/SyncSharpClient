@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../Environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Work, WorkDetail, CreateWork, UpdateWork, User } from '../Models/work.model';
+import { Work, WorkDetail, CreateWork, UpdateWork, User, GeneralResponse } from '../Models/work.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +21,8 @@ export class WorkService {
     return this.http.get<WorkDetail>(`${this.restApiUrl}/Work/${workID}/Detail`);
   }
 
-  getUserWorks(userID: string): Observable<Work[]> {
-    return this.http.get<Work[]>(`${this.restApiUrl}/Work/GetUserWorks/${userID}`);
+  getUserWorks(userID: string): Observable<GeneralResponse<Work[]>> {
+    return this.http.get<GeneralResponse<Work[]>>(`${this.restApiUrl}/Work/GetUserWorks/${userID}`);
   }
 
   createWork(work: CreateWork): Observable<{ workID: string }> {

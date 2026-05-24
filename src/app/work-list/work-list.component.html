@@ -1,0 +1,26 @@
+<div class="work-list-container">
+    <div class="row m-0">
+        <div *ngIf="workList.length === 0">
+            <p>You have no works yet. Create your first work to get started!</p>
+        </div>
+        <div *ngFor="let work of workList" class="col-lg-3 col-md-4 col-sm-6 p-2 work-items">
+            <div class="work-item d-flex flex-column justify-content-between gap-5">
+                <div>
+                    <h3>{{ work.title }}</h3>
+                    <p>{{ work.description }}</p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small style="color: #a6aaf8;">Language: <span style="color: #ffffff;">{{ work.language
+                            }}</span></small>
+                    <div class="d-flex justify-content-center align-items-center gap-1">
+                        <div class="indicator" [ngClass]="{'online': work.activeUsersCount > 0}"></div>
+                        <img src="assets/icons/user.svg" style="width: 1rem;">
+                        <span
+                            style="color: #a6aaf8;font-size: 14px;background: rgba(255, 255, 255, 0.06);padding: 0.1rem 0.7rem;border-radius: 0.25rem;">{{
+                            work.activeUsersCount }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

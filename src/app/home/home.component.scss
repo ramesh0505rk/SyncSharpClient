@@ -8,11 +8,11 @@
 .top-bar {
     height: 14vh;
     background-color: transparent;
-    position: fixed;
+    // position: fixed;
 }
 
 .top-bar-inner {
-    width: 80%;
+    width: 65%;
     height: 10vh;
     border-radius: 15px;
 
@@ -20,6 +20,7 @@
     backdrop-filter: blur(12px);
     border: 1px solid rgb(128, 128, 128, 0.2);
     padding: 1rem;
+    position: fixed;
 }
 
 h3 {
@@ -38,12 +39,23 @@ h3 {
     gap: 0;
 }
 
+.create-work-container {
+    border: none;
+    background: linear-gradient(45deg, #f8aac0, #a6aaf8);
+    color: white;
+    font-size: 24px;
+    font-weight: 500;
+    border-radius: 999px;
+    width: 40px;
+    height: 40px;
+}
+
 #bubble {
     background: rgba(255, 255, 255, 0.015);
     backdrop-filter: blur(6px);
 }
 
-.profile-container{
+.profile-container {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -52,5 +64,10 @@ h3 {
 }
 
 .main-content {
-    margin-top: 14vh;
+    min-height: calc(100vh - 14vh);
+}
+
+.content-container {
+    padding-bottom: 2vh;
+    min-height: calc(100vh - 14vh);
 }

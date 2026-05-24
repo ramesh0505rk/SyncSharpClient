@@ -8,7 +8,17 @@ export const routes: Routes = [
     {
         path: 'home',
         loadComponent: () => import('./home/home.component').then(m => m.HomeComponent),
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        children: [
+            {
+                path: '',
+                loadComponent: () => import('./work-list/work-list.component').then(m => m.WorkListComponent)
+            },
+            {
+                path: 'work-list',
+                loadComponent: () => import('./work-list/work-list.component').then(m => m.WorkListComponent)
+            }
+        ]
     },
     { path: 'signin', component: SignInComponent },
     { path: 'signup', component: SignUpComponent }

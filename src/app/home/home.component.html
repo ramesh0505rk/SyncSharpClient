@@ -1,101 +1,31 @@
 <div class="home-container">
     <div class="top-bar w-100 d-flex justify-content-center align-items-center">
-        <div class="top-bar-inner d-flex justify-content-between align-items-center">
+        <div class="top-bar-inner d-flex justify-content-between align-items-center" style="z-index: 2;">
             <div class="logo-container">
                 <h3 class="logo-text" style="cursor: pointer;" (click)="onClickSyncSharp()">Sync#</h3>
             </div>
-            <div class="nav-container d-flex">
-                <div id="bubble"
-                    style="position: absolute; top: 4px; left: 4px; height: calc(100% - 8px); border-radius: 999px; transition: left 0.3s cubic-bezier(0.34, 1.2, 0.64, 1), width 0.3s cubic-bezier(0.34, 1.2, 0.64, 1); pointer-events: none; z-index: 0;">
+            <div class="d-flex justify-content-center align-items-center gap-2">
+                <div class="nav-container d-flex">
+                    <div id="bubble"
+                        style="position: absolute; top: 4px; left: 4px; height: calc(100% - 8px); border-radius: 999px; transition: left 0.3s cubic-bezier(0.34, 1.2, 0.64, 1), width 0.3s cubic-bezier(0.34, 1.2, 0.64, 1); pointer-events: none; z-index: 0;">
+                    </div>
+                    <button class="tab-btn" data-index="0"
+                        style="position: relative; z-index: 1; background: transparent; border: none; cursor: pointer; padding: 8px 22px; border-radius: 999px; font-size: 14px; font-weight: 500; color: #FFFFFF; transition: color 0.2s; white-space: nowrap;">Work</button>
+                    <button class="tab-btn" data-index="1"
+                        style="position: relative; z-index: 1; background: transparent; border: none; cursor: pointer; padding: 8px 22px; border-radius: 999px; font-size: 14px; font-weight: 400; color: #FBFBFB; transition: color 0.2s; white-space: nowrap;">Introduction</button>
                 </div>
-                <button class="tab-btn" data-index="0"
-                    style="position: relative; z-index: 1; background: transparent; border: none; cursor: pointer; padding: 8px 22px; border-radius: 999px; font-size: 14px; font-weight: 500; color: #FFFFFF; transition: color 0.2s; white-space: nowrap;">Work</button>
-                <button class="tab-btn" data-index="1"
-                    style="position: relative; z-index: 1; background: transparent; border: none; cursor: pointer; padding: 8px 22px; border-radius: 999px; font-size: 14px; font-weight: 400; color: #FBFBFB; transition: color 0.2s; white-space: nowrap;">Introduction</button>
+                <button class="create-work-container">
+                    +
+                </button>
             </div>
             <div class="profile-container d-flex justify-content-center align-items-center" style="cursor: pointer;">
-                <h3>R</h3>
+                <h3>{{profileLetter}}</h3>
             </div>
         </div>
     </div>
-    <div class="main-content">
-
-
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus veritatis provident iste delectus optio
-            praesentium nesciunt, totam quos ab, voluptatem voluptatum dolorum, molestias illo quod facilis perferendis
-            odio
-            cumque! Obcaecati.</p>
+    <div class="main-content d-flex justify-content-center align-items-center" style="z-index: 1;">
+        <div class="content-container" style="width: 80%; ">
+            <router-outlet></router-outlet>
+        </div>
     </div>
 </div>
