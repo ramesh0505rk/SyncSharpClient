@@ -1,0 +1,39 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.create-work-container{
+    padding: 1rem;
+}
+.heading{
+    color: transparent;
+    background: linear-gradient(45deg, #f8aac0, #a6aaf8);
+    background-clip: text;
+    font-weight: 900;
+}
+
+.close-btn{
+    border:none;
+    background: none;
+
+    img{
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.cancel-btn{
+    border: 1px solid rgb(128, 128, 128, 0.4);
+    background: transparent;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+}
+
+.create-btn{
+    border:none;
+    background: linear-gradient(45deg, #f8aac0, #a6aaf8);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+}

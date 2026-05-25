@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserDetails, UserDetailsService } from '../services/user-details.service';
 import { Router, RouterOutlet } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CreateWorkComponent } from '../create-work/create-work.component';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +18,7 @@ export class HomeComponent implements OnInit {
   userDetails: UserDetails | null = null;
   profileLetter: string = '';
 
-  constructor(private userDetailsService: UserDetailsService, private router: Router) {
+  constructor(private userDetailsService: UserDetailsService, private router: Router, private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -52,5 +54,14 @@ export class HomeComponent implements OnInit {
 
   onClickSyncSharp() {
     this.router.navigate(['/']);
+  }
+
+  onCreateWork() {
+    const modalRef = this.modalService.open(CreateWorkComponent, {
+      size: 'lg',
+      centered: true,
+      // backdrop: 'static',
+      keyboard: false
+    })
   }
 }
