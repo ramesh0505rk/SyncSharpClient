@@ -5,6 +5,7 @@ import { Work, WorkDetail } from '../Models/work.model';
 import { UserDetailsService } from '../services/user-details.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { CreateWorkComponent } from '../create-work/create-work.component';
 
 @Component({
   selector: 'app-work-list',
@@ -36,5 +37,14 @@ export class WorkListComponent implements OnInit {
         console.error('Error fetching user works:', err);
       }
     });
+  }
+
+  onCreateWork(){
+    // const modalRef = this.modalService.open(CreateWorkComponent,{
+    //   size: 'lg',
+    //   centered: true,
+    //   backdrop: 'static',
+    //   keyboard: false
+    // })
   }
 }
