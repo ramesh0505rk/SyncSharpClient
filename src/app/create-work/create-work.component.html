@@ -1,4 +1,4 @@
-<div class="create-work-container d-flex flex-column">
+<div class="create-work-container d-flex flex-column gap-4">
     <div class="header-container d-flex justify-content-between align-items-center">
         <h4 class="heading">Create Work</h4>
         <button class="close-btn align-items-center" (click)="activeModal.close()"><img src="assets/icons/close.svg"
@@ -13,12 +13,12 @@
             </div>
             <div>
                 <label for="description" class="form-label">Description</label>
-                <textarea id="description" formControlName="description" class="form-control"
-                    placeholder="Enter work description"></textarea>
+                <input type="text" id="description" formControlName="description" class="form-control"
+                    placeholder="Enter work description">
             </div>
             <div>
                 <label for="language" class="form-label">Language</label>
-                <select id="language" formControlName="language" class="form-control">
+                <select id="language" formControlName="language" style="width: 50%;" class="form-control">
                     <option value="">Select a language</option>
                     <option value="javascript">JavaScript</option>
                     <option value="python">Python</option>

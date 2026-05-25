@@ -20,7 +20,7 @@ export class CreateWorkComponent implements OnInit {
         ele.parentElement.style.borderRadius = '15px';
         ele.parentElement.style.minWidth = '500px';
         ele.parentElement.style.border = '1px solid rgb(128, 128, 128, 0.2)';
-        ele.parentElement.style.backgroundColor = '#000000d7';
+        ele.parentElement.style.backgroundColor = '#111111';
       }
     });
   }
