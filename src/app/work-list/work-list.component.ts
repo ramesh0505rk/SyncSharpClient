@@ -17,8 +17,6 @@ export class WorkListComponent implements OnInit {
 
   workList: Work[] = [];
 
-  // myList: string[] = ['Work 1', 'Work 2', 'Work 3', 'Work 4', 'Work 5'];
-
   constructor(private userDetailsService: UserDetailsService, private workService: WorkService, private workRealtimeService: WorkRealtimeService) { }
 
   ngOnInit(): void {

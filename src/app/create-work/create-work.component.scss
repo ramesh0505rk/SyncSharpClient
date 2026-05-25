@@ -25,9 +25,9 @@
 }
 
 .cancel-btn {
-    border: 1px solid rgb(128, 128, 128, 0.4);
+    border: 1px solid rgba(255, 0, 0, 0.5);
     background: transparent;
-    color: white;
+    color: rgb(255, 0, 0, 0.6);
     padding: 0.5rem 1rem;
     border-radius: 8px;
 }
@@ -45,8 +45,7 @@ label {
     font-size: 14px;
 }
 
-input,
-select {
+input {
     background: #111111;
     border: 1px solid rgb(128, 128, 128, 0.4);
     color: white;
@@ -57,10 +56,91 @@ select {
     }
 }
 
-input:focus,
-select:focus {
+input:focus {
     background: #111111;
     box-shadow: none;
     border: 1px solid #a6aaf8;
     color: white;
+}
+
+// Custom select bar
+.custom-select-wrapper {
+    position: relative;
+    width: 50%;
+}
+
+.custom-select-trigger {
+    background: #111111;
+    border: 1px solid rgba(128, 128, 128, 0.4);
+    color: white;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 6px;
+    user-select: none;
+
+    &.open {
+        border-color: #a6aaf8;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+
+        .chevron {
+            transform: rotate(180deg);
+        }
+    }
+
+    .chevron {
+        width: 16px;
+        height: 16px;
+        transition: transform 0.3s;
+        color: #ffffff80;
+    }
+}
+
+.custom-select-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: #111111;
+    border: 1px solid #a6aaf8;
+    border-top: none;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    overflow: hidden;
+
+    height: 160px;
+    overflow-y: auto;
+
+    &.open {
+        display: block;
+    }
+}
+
+.custom-select-option {
+    padding: 0.5rem 1rem;
+    color: white;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:hover {
+        background: rgba(166, 170, 248, 0.18);
+        color: #a6aaf8;
+        background: linear-gradient(45deg, #a6aaf8, #f8aac0);
+        color: #ffffff;
+    }
+
+    &.placeholder-option {
+        color: rgba(255, 255, 255, 0.5);
+        &:hover {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: default;
+        }
+    }
 }

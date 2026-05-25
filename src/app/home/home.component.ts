@@ -59,7 +59,7 @@ export class HomeComponent implements OnInit {
   onCreateWork() {
     const modalRef = this.modalService.open(CreateWorkComponent, {
       size: 'lg',
-      centered: true,
+      // centered: true,
       // backdrop: 'static',
       keyboard: false
     })
