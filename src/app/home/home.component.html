@@ -22,9 +22,18 @@
                 style="cursor: pointer;position: relative;">
                 <h3>{{profileLetter}}</h3>
                 <div class="profile-dropdown" style="z-index: 2;">
-                    <button class="dropdown-item">Profile</button>
-                    <button class="dropdown-item">Settings</button>
-                    <button class="dropdown-item" (click)="onLogout()">Logout</button>
+                    <button class="dropdown-item d-flex align-items-center gap-2">
+                        <img src="assets/icons/user2.svg" alt="Profile" style="width: 20px; height: 20px;">
+                        <p class="m-0">Profile</p>
+                    </button>
+                    <button class="dropdown-item d-flex align-items-center gap-2">
+                        <img src="assets/icons/settings.svg" alt="Settings" style="width: 20px; height: 20px;">
+                        <p class="m-0">Settings</p>
+                    </button>
+                    <button class="dropdown-item d-flex align-items-center gap-2" (click)="onLogout()">
+                        <img src="assets/icons/logout.svg" alt="Logout" style="width: 20px; height: 20px;">
+                        <p class="m-0">Logout</p>
+                    </button>
                 </div>
             </div>
         </div>
