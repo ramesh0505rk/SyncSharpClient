@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
   userDetails: UserDetails | null = null;
   profileLetter: string = '';
 
-  constructor(private userDetailsService: UserDetailsService, private router: Router, 
+  constructor(private userDetailsService: UserDetailsService, private router: Router,
     private modalService: NgbModal, private workDetailsService: WorkDetailsService) {
   }
 
@@ -36,6 +36,8 @@ export class HomeComponent implements OnInit {
     // Subscribe to user details
     this.userDetails = this.userDetailsService.userDetails;
     this.profileLetter = this.userDetails?.FirstName.charAt(0).toUpperCase() || '';
+
+    this.setupProfileSelect();
   }
 
   moveBubble(index: number) {
@@ -70,5 +72,26 @@ export class HomeComponent implements OnInit {
         this.workDetailsService.setLoadWorkList(true);
       }
     });
+  }
+
+  setupProfileSelect() {
+    const trigger = document.querySelector('.profile-container');
+    const dropdown = trigger?.querySelector('.profile-dropdown');
+
+    trigger?.addEventListener('click', () => {
+      dropdown?.classList.toggle('open');
+    });
+
+    document?.addEventListener('click', (e) => {
+      if (!trigger?.contains(e.target as Node)) {
+        dropdown?.classList.remove('open');
+      }
+    });
+  }
+
+  onLogout() {
+    localStorage.removeItem('accessToken');
+    this.userDetailsService.setUserDetails(null);
+    this.router.navigate(['/signin']);
   }
 }

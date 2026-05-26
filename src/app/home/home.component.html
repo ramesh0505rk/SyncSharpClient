@@ -18,8 +18,14 @@
                     +
                 </button>
             </div>
-            <div class="profile-container d-flex justify-content-center align-items-center" style="cursor: pointer;">
+            <div class="profile-container d-flex justify-content-center align-items-center"
+                style="cursor: pointer;position: relative;">
                 <h3>{{profileLetter}}</h3>
+                <div class="profile-dropdown" style="z-index: 2;">
+                    <button class="dropdown-item">Profile</button>
+                    <button class="dropdown-item">Settings</button>
+                    <button class="dropdown-item" (click)="onLogout()">Logout</button>
+                </div>
             </div>
         </div>
     </div>
