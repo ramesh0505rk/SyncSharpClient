@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { UserDetails, UserDetailsService } from '../services/user-details.service';
 import { Router, RouterOutlet } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateWorkComponent } from '../create-work/create-work.component';
+import { WorkDetailsService } from '../services/work-details.service';
 
 @Component({
   selector: 'app-home',
@@ -12,13 +13,13 @@ import { CreateWorkComponent } from '../create-work/create-work.component';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-
   private btns!: NodeListOf<HTMLButtonElement>;
   private bubble!: HTMLElement | null;
   userDetails: UserDetails | null = null;
   profileLetter: string = '';
 
-  constructor(private userDetailsService: UserDetailsService, private router: Router, private modalService: NgbModal) {
+  constructor(private userDetailsService: UserDetailsService, private router: Router, 
+    private modalService: NgbModal, private workDetailsService: WorkDetailsService) {
   }
 
   ngOnInit(): void {
@@ -59,9 +60,15 @@ export class HomeComponent implements OnInit {
   onCreateWork() {
     const modalRef = this.modalService.open(CreateWorkComponent, {
       size: 'lg',
-      // centered: true,
-      // backdrop: 'static',
       keyboard: false
     })
+
+    modalRef.componentInstance.userID = this.userDetails?.UserID || '';
+
+    modalRef.result.then((result) => {
+      if (result === 'created') {
+        this.workDetailsService.setLoadWorkList(true);
+      }
+    });
   }
 }

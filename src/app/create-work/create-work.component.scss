@@ -30,6 +30,11 @@
     color: rgb(255, 0, 0, 0.6);
     padding: 0.5rem 1rem;
     border-radius: 8px;
+
+    &:hover {
+        border: 1px solid rgba(255, 0, 0, 0.9);
+        color: rgb(255, 0, 0, 0.9);
+    }
 }
 
 .create-btn {
@@ -66,7 +71,6 @@ input:focus {
 // Custom select bar
 .custom-select-wrapper {
     position: relative;
-    width: 50%;
 }
 
 .custom-select-trigger {
@@ -137,6 +141,7 @@ input:focus {
 
     &.placeholder-option {
         color: rgba(255, 255, 255, 0.5);
+
         &:hover {
             background: transparent;
             color: rgba(255, 255, 255, 0.5);

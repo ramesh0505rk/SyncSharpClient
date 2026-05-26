@@ -1,8 +1,8 @@
 <div class="create-work-container d-flex flex-column gap-4">
     <div class="header-container d-flex justify-content-between align-items-center">
         <h4 class="heading">Create Work</h4>
-        <button class="close-btn align-items-center" (click)="activeModal.close()"><img src="assets/icons/close.svg"
-                alt="Close"></button>
+        <button class="close-btn align-items-center" (click)="activeModal.close('closed')"><img
+                src="assets/icons/close.svg" alt="Close"></button>
     </div>
     <div class="content">
         <form [formGroup]="createWorkForm" class="d-flex flex-column gap-4">
@@ -16,25 +16,27 @@
                 <input type="text" id="description" formControlName="description" class="form-control"
                     placeholder="Enter work description">
             </div>
-            <div class="d-flex flex-column gap-2">
-                <label for="language" class="form-label">Language</label>
-                <div class="custom-select-wrapper" tabindex="0">
-                    <div class="custom-select-trigger d-flex justify-content-between align-items-center">
-                        <span class="selected-label">Select a language</span>
-                        <img src="assets/icons/chevron.svg" class="chevron" />
+            <div class="row m-0">
+                <div class="d-flex flex-column gap-2 col-6">
+                    <label for="language" class="form-label">Language</label>
+                    <div class="custom-select-wrapper" tabindex="0">
+                        <div class="custom-select-trigger d-flex justify-content-between align-items-center">
+                            <span class="selected-label">Select a language</span>
+                            <img src="assets/icons/chevron.svg" class="chevron" />
+                        </div>
+                        <div class="custom-select-dropdown">
+                            <div class="custom-select-option placeholder-option" data-value="">Select a language</div>
+                            <div *ngFor="let language of languages" class="custom-select-option"
+                                [attr.data-value]="language">{{ language }}</div>
+                        </div>
                     </div>
-                    <div class="custom-select-dropdown">
-                        <div class="custom-select-option placeholder-option" data-value="">Select a language</div>
-                        <div *ngFor="let language of languages" class="custom-select-option"
-                            [attr.data-value]="language">{{ language }}</div>
-                    </div>
+                    <input type="hidden" formControlName="language" id="language-value">
                 </div>
-                <input type="hidden" formControlName="language" id="language-value">
             </div>
         </form>
     </div>
     <div class="footer-container d-flex justify-content-end align-items-center gap-3">
-        <button class="cancel-btn" (click)="activeModal.close()">Cancel</button>
-        <button class="create-btn" [disabled]="!createWorkForm.valid">Create</button>
+        <button class="cancel-btn" (click)="activeModal.close('cancelled')">Cancel</button>
+        <button class="create-btn" (click)="onCreate()" [disabled]="!createWorkForm.valid">Create</button>
     </div>
 </div>

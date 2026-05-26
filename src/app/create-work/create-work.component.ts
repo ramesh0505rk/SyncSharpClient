@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { NgbActiveModal, NgbAccordionItem } from '@ng-bootstrap/ng-bootstrap';
+import { WorkService } from '../services/work.service';
+import { CreateWork } from '../Models/work.model';
 
 @Component({
   selector: 'app-create-work',
@@ -11,9 +13,11 @@ import { NgbActiveModal, NgbAccordionItem } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './create-work.component.scss'
 })
 export class CreateWorkComponent implements OnInit {
+  @Input() userID: string = '';
+
   createWorkForm!: FormGroup;
   languages: string[] = ['C#', 'Java', 'Python', 'JavaScript', 'TypeScript', 'Go', 'Ruby', 'PHP', 'C++', 'C'];
-  constructor(private fb: FormBuilder, public activeModal: NgbActiveModal) { }
+  constructor(private fb: FormBuilder, public activeModal: NgbActiveModal, private workService: WorkService) { }
 
   ngOnInit(): void {
     this.initializeCreateWorkForm();
@@ -36,8 +40,27 @@ export class CreateWorkComponent implements OnInit {
     })
   }
 
-  onCreate(){
-    
+  onCreate() {
+    var request = {
+      title: this.createWorkForm.get('title')?.value,
+      description: this.createWorkForm.get('description')?.value,
+      language: this.createWorkForm.get('language')?.value,
+      code: '',
+      createdBy: this.userID
+    };
+
+    console.log('Creating work with request:', request);
+
+    this.workService.createWork(request).subscribe({
+      next: (response) => {
+        console.log('Work created successfully:', response);
+        this.activeModal.close('created');
+      },
+      error: (err) => {
+        console.error('Error creating work:', err);
+        alert('Failed to create work. Please try again.');
+      }
+    })
   }
 
   setupCustomSelect() {
@@ -50,7 +73,6 @@ export class CreateWorkComponent implements OnInit {
       dropdown?.classList.toggle('open');
     });
 
-    // ← single delegated listener on the container instead of each option
     dropdown?.addEventListener('click', (e) => {
       const opt = (e.target as HTMLElement).closest('.custom-select-option');
       if (!opt || opt.classList.contains('placeholder-option')) return;

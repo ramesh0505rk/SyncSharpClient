@@ -20,6 +20,7 @@ export const routes: Routes = [
             }
         ]
     },
+    { path: 'work/:workID', loadComponent: () => import('./work-editor/work-editor.component').then(m => m.WorkEditorComponent), canActivate: [authGuard] },
     { path: 'signin', component: SignInComponent },
     { path: 'signup', component: SignUpComponent }
 ];

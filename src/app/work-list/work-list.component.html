@@ -4,10 +4,10 @@
             <p>You have no works yet. Create your first work to get started!</p>
         </div>
         <div *ngFor="let work of workList" class="col-lg-3 col-md-4 col-sm-6 p-2 work-items">
-            <div class="work-item d-flex flex-column justify-content-between gap-5">
+            <div (click)="loadWork(work.workID)" class="work-item d-flex flex-column justify-content-between gap-5">
                 <div>
-                    <h3>{{ work.title }}</h3>
-                    <p>{{ work.description }}</p>
+                    <h3 class="truncate-title">{{ work.title }}</h3>
+                    <p class="truncate-description">{{ work.description }}</p>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                     <small style="color: #a6aaf8;">Language: <span style="color: #ffffff;">{{ work.language

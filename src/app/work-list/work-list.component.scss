@@ -62,7 +62,17 @@
         background-clip: text;
     }
 
-    p{
+    .truncate-title,
+    .truncate-description {
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        word-break: break-word;
+        -webkit-line-clamp: 1;
+    }
+
+    .truncate-description {
         color: rgb(255, 255, 255, 0.7);
         font-size: 14px;
         font-style: italic;

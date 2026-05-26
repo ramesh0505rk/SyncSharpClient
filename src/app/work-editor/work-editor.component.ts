@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-work-editor',
@@ -7,6 +7,10 @@ import { Component } from '@angular/core';
   templateUrl: './work-editor.component.html',
   styleUrl: './work-editor.component.scss'
 })
-export class WorkEditorComponent {
+export class WorkEditorComponent implements OnInit {
+  @Input() workID!: string;
 
+  ngOnInit(): void {
+    console.log('WorkEditorComponent initialized with workID:', this.workID);
+  }
 }
