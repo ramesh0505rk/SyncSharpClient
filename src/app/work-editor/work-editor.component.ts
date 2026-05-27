@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { WorkRealtimeService } from '../services/work-realtime.service';
 import { WorkService } from '../services/work.service';
 import { UserDetails, UserDetailsService } from '../services/user-details.service';
-import { ActiveUser, WorkDetail } from '../Models/work.model';
+import { ActiveUser, UpdateWork, WorkDetail } from '../Models/work.model';
 import { debounceTime, Subject } from 'rxjs';
 
 @Component({
@@ -124,7 +124,12 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
   }
 
   saveWork(){
-    
+    const updateData: UpdateWork = {
+      workID: this.workID,
+      code: this.currentCode,
+      language: this.work?.language as string,
+      modifiedBy: this.userDetails?.UserID as string
+    }
   }
 
   calculateLineNumber(position: number): number {
