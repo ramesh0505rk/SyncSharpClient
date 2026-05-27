@@ -18,7 +18,7 @@ export class WorkRealtimeService {
   public userJoined$ = new Subject<{ userID: string; username: string; connectionID: string }>();
   public userLeft$ = new Subject<{ userID: string; username: string; connectionID: string }>();
   public userDisconnected$ = new Subject<{ userID: string; username: string; workID: string }>();
-  public activeUsers$ = new Subject<ActiveUser>();
+  public activeUsers$ = new Subject<ActiveUser[]>();
   public cursorMoved$ = new Subject<{ connectionID: string; cursorPosition: number; lineNumber: number }>();
   public snapshotSaved$ = new Subject<{ workID: string; savedBy: string }>();
   public error$ = new Subject<string>();

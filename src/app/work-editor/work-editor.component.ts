@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { WorkRealtimeService } from '../services/work-realtime.service';
 import { WorkService } from '../services/work.service';
 import { UserDetails, UserDetailsService } from '../services/user-details.service';
 import { ActiveUser, WorkDetail } from '../Models/work.model';
-import { Subject } from 'rxjs';
+import { debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-work-editor',
@@ -12,7 +12,7 @@ import { Subject } from 'rxjs';
   templateUrl: './work-editor.component.html',
   styleUrl: './work-editor.component.scss'
 })
-export class WorkEditorComponent implements OnInit {
+export class WorkEditorComponent implements OnInit, OnDestroy {
   @Input() workID!: string;
 
   userDetails: UserDetails | null = null;
@@ -47,12 +47,30 @@ export class WorkEditorComponent implements OnInit {
     // console.log('WorkEditorComponent initialized with workID:', this.workID);
     this.userDetails = this.userDetailsService.userDetails;
 
+    // Connect to signalR hub
     this.workRealitimeService.startConnection();
 
+    // Subscribe to real-time events
+    this.subscribeToRealtimeWorkEvents();
 
+    // Debounce code & cursor changes
+    this.codeChange$.pipe(debounceTime(300)).subscribe(code => {
+      this.workRealitimeService.updateCode(this.workID, code, this.cursorPosition);
+    });
+
+    this.cursorChange$.pipe(debounceTime(300)).subscribe(position => {
+      const lineNumber = this.calculateLineNumber(position);
+      this.workRealitimeService.updateCursor(this.workID, position, lineNumber);
+    });
+
+    this.workRealitimeService.joinWork(this.workID, this.userDetails?.UserID as string, this.userDetails?.UserName as string);
+
+    this.autoSaveInterval = setInterval(() => {
+
+    }, 30000) // Auto-save every 30 seconds
   }
 
-  subscribeToRealTimeWorkEvents() {
+  subscribeToRealtimeWorkEvents() {
     // Work loaded from server
     this.workRealitimeService.workLoaded$.subscribe(data => {
       this.work = data;
@@ -66,5 +84,54 @@ export class WorkEditorComponent implements OnInit {
         this.currentCode = data.code;
       }
     })
+
+    // Active users list
+    this.workRealitimeService.activeUsers$.subscribe(activeUsers => {
+      this.activeUsers = activeUsers.filter(u => u.userID !== this.userDetails?.UserID);
+    });
+
+    // User joined
+    this.workRealitimeService.userJoined$.subscribe(data => {
+      if (data.userID != this.userDetails?.UserID) {
+        this.activeUsers.push(data);
+      }
+    })
+
+    // User left
+    this.workRealitimeService.userLeft$.subscribe(data => {
+      this.activeUsers = this.activeUsers.filter(u => u.connectionID != data.connectionID);
+    })
+
+    // Snapshot saved
+    this.workRealitimeService.snapshotSaved$.subscribe(data => {
+
+    })
+
+    // Errors
+    this.workRealitimeService.error$.subscribe(error => {
+
+    })
+  }
+
+  onCodeChange(newCode: string) {
+    this.currentCode = newCode;
+    this.codeChange$.next(newCode);
+  }
+
+  onCursorChange(newPosition: number) {
+    this.cursorPosition = newPosition;
+    this.cursorChange$.next(newPosition);
+  }
+
+  saveWork(){
+    
+  }
+
+  calculateLineNumber(position: number): number {
+    const textBeforeCursor = this.currentCode.substring(0, position);
+    return (textBeforeCursor.match(/\n/g) || []).length + 1;
+  }
+
+  ngOnDestroy(): void {
   }
 }
