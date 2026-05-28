@@ -123,13 +123,22 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
     this.cursorChange$.next(newPosition);
   }
 
-  saveWork(){
+  saveWork() {
     const updateData: UpdateWork = {
       workID: this.workID,
       code: this.currentCode,
       language: this.work?.language as string,
       modifiedBy: this.userDetails?.UserID as string
     }
+
+    this.workService.updateWork(updateData).subscribe({
+      next: () => {
+        this.workRealitimeService.saveSnapshot(this.workID, this.currentCode, this.userDetails?.UserID as string, 'Manual save');
+      },
+      error: (err) => {
+        console.error('Error saving work: ', err);
+      }
+    });
   }
 
   calculateLineNumber(position: number): number {

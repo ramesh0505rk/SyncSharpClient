@@ -27,7 +27,7 @@
     &::before {
         content: '';
         position: absolute;
-        inset: -70%;
+        inset: -90%;
         background: conic-gradient(from 0deg, transparent 0%, transparent 55%, #a6aaf8 73%, #f8aac0 88%, transparent 100%);
         animation: rotate-border 3s linear infinite;
         animation-play-state: paused;
