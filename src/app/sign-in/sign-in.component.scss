@@ -6,8 +6,46 @@
         align-items: center;
         justify-content: center;
         min-height: 100vh;
-        background-color: #111111;
+        background-color: rgb(17, 17, 17);
         overflow: auto;
+        position: relative;
+}
+
+.loader-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgb(0, 0, 0,0.7);
+        z-index: 999;
+}
+
+.loader {
+        width: 120px;
+}
+
+.hash {
+        stroke-dasharray: 60 31 60 103 60 43 60 600;
+        stroke-dashoffset: 430;
+        animation: draw 2.5s ease-in-out infinite;
+
+        stroke: #a6aaf8;
+}
+
+@keyframes draw {
+        0% {
+                stroke-dashoffset: 430;
+        }
+        45% {
+                stroke-dashoffset: 0;
+        } /* fully drawn */
+        60% {
+                stroke-dashoffset: 0;
+        } /* holds here — this is your delay */
+        100% {
+                stroke-dashoffset: 430;
+        }
 }
 
 .signin-card {
@@ -22,7 +60,7 @@
         .logo-text {
                 color: transparent;
                 background: linear-gradient(45deg, #f8aac0, #a6aaf8);
-                background-clip: text; 
+                background-clip: text;
                 font-weight: 900;
                 font-style: italic;
         }

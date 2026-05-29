@@ -1,8 +1,5 @@
 <div class="work-list-container">
     <div class="row m-0">
-        <div *ngIf="workList.length === 0">
-            <p>You have no works yet. Create your first work to get started!</p>
-        </div>
         <div *ngFor="let work of workList" class="col-lg-3 col-md-4 col-sm-6 p-2 work-items">
             <div (click)="loadWork(work.workID)" class="work-item d-flex flex-column justify-content-between gap-5">
                 <div>

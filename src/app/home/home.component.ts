@@ -4,11 +4,12 @@ import { Router, RouterOutlet } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateWorkComponent } from '../create-work/create-work.component';
 import { WorkDetailsService } from '../services/work-details.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -17,6 +18,7 @@ export class HomeComponent implements OnInit {
   private bubble!: HTMLElement | null;
   userDetails: UserDetails | null = null;
   profileLetter: string = '';
+  workLoaded: boolean = true;
 
   constructor(private userDetailsService: UserDetailsService, private router: Router,
     private modalService: NgbModal, private workDetailsService: WorkDetailsService) {
@@ -36,6 +38,10 @@ export class HomeComponent implements OnInit {
     // Subscribe to user details
     this.userDetails = this.userDetailsService.userDetails;
     this.profileLetter = this.userDetails?.FirstName.charAt(0).toUpperCase() || '';
+
+    this.workDetailsService.workLoaded$.subscribe(loaded => {
+      this.workLoaded = loaded;
+    })
 
     this.setupProfileSelect();
   }

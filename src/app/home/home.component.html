@@ -12,9 +12,10 @@
                     <button class="tab-btn" data-index="0"
                         style="position: relative; z-index: 1; background: transparent; border: none; cursor: pointer; padding: 8px 22px; border-radius: 999px; font-size: 14px; font-weight: 500; color: #FFFFFF; transition: color 0.2s; white-space: nowrap;">Work</button>
                     <button class="tab-btn" data-index="1"
-                        style="position: relative; z-index: 1; background: transparent; border: none; cursor: pointer; padding: 8px 22px; border-radius: 999px; font-size: 14px; font-weight: 400; color: #FBFBFB; transition: color 0.2s; white-space: nowrap;">Introduction</button>
+                        style="position: relative; z-index: 1; background: transparent; border: none; cursor: pointer; padding: 8px 22px; border-radius: 999px; font-size: 14px; font-weight: 400; color: #FBFBFB; transition: color 0.2s; white-space: nowrap;">Intro</button>
                 </div>
-                <button class="create-work-container d-flex justify-content-center align-items-center" (click)="onCreateWork()">
+                <button class="create-work-container d-flex justify-content-center align-items-center"
+                    (click)="onCreateWork()">
                     <img src="assets/icons/add.svg" alt="Create Work" style="width: 25px; height: 25px;">
                 </button>
             </div>
@@ -42,5 +43,15 @@
         <div class="content-container" style="width: 80%; ">
             <router-outlet></router-outlet>
         </div>
+    </div>
+    <div class="loader-overlay d-flex flex-column justify-content-center align-items-center" *ngIf="!workLoaded">
+        <div class="loader">
+            <svg class="hash-svg" viewBox="-20 -20 140 140">
+                <path class="hash" stroke="black" fill="none" stroke-width="9" stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m20 40 h60 a1 1 0 0 1 0 20 h-70 a1 1 0 0 1 0 -40 h30 l-10 60 a4 3 0 0 0 30 0 l10 -60" />
+            </svg>
+        </div>
+        <span style="color: #ffffff; font-weight: 400; font-style: italic;">Loading work...</span>
     </div>
 </div>

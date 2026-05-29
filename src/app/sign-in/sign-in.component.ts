@@ -17,6 +17,8 @@ export class SignInComponent implements OnInit {
   signInForm!: FormGroup;
   isPasswordVisible: boolean = false;
 
+  isLoading: boolean = false;
+
   constructor(private fb: FormBuilder, private router: Router, private userService: UserService, private authService: AuthService) { }
 
 
@@ -36,7 +38,9 @@ export class SignInComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isLoading = true;
     if (this.signInForm.invalid) {
+      this.isLoading = false;
       this.signInForm.markAllAsTouched();
       return;
     }
@@ -48,9 +52,10 @@ export class SignInComponent implements OnInit {
         localStorage.setItem('accessToken', res.accessToken);
         this.authService.checkAuthStatus();
         this.router.navigate(['/home']);
+        this.isLoading = false;
       },
       error: (err: any) => {
-
+        this.isLoading = false;
       }
     })
 

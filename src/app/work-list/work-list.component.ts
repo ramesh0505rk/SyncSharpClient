@@ -34,18 +34,22 @@ export class WorkListComponent implements OnInit {
   }
 
   loadWorkList() {
+    this.workDetailsService.setWorkLoaded(false);
     // Fetch user's works
     this.workService.getUserWorks(this.userDetailsService.userDetails!.UserID).subscribe({
       next: (response) => {
         if (response.success) {
           this.workList = response.data;
           console.log('Fetched user works:', this.workList);
+          this.workDetailsService.setWorkLoaded(true);
         } else {
           console.error('Error fetching user works:', response.responseMessage);
+          this.workDetailsService.setWorkLoaded(true);
         }
       },
       error: (err) => {
         console.error('Error fetching user works:', err);
+        this.workDetailsService.setWorkLoaded(true);
       }
     });
   }
