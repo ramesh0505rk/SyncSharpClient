@@ -4,11 +4,13 @@ import { WorkService } from '../services/work.service';
 import { UserDetails, UserDetailsService } from '../services/user-details.service';
 import { ActiveUser, UpdateWork, WorkDetail } from '../Models/work.model';
 import { debounceTime, Subject } from 'rxjs';
-
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-work-editor',
   standalone: true,
-  imports: [],
+  imports: [MonacoEditorModule, CommonModule, FormsModule],
   templateUrl: './work-editor.component.html',
   styleUrl: './work-editor.component.scss'
 })
@@ -25,14 +27,18 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
   // Active users
   activeUsers: ActiveUser[] = [];
 
+  // Monaco editor instance reference
+  monacoEditor: any;
+
   // Monoco editor object
   editorOptions = {
     theme: 'vs-dark',
-    language: 'javascript',
+    language: 'java',
     automaticLayout: true,
     minimap: { enabled: false },
     fontSize: 14,
-    lineNumbers: 'on'
+    lineNumbers: 'on',
+    dragAndDrop: true,
   }
 
   // Subjects for real-time events
@@ -43,15 +49,31 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
   constructor(private workRealitimeService: WorkRealtimeService, private workService: WorkService,
     private userDetailsService: UserDetailsService) { }
 
+  onEditorInit(editor: any) {
+    this.monacoEditor = editor;
+  }
+
+  setEditorLanguage(language: string) {
+    this.editorOptions.language = language;
+
+    const monacoGlobal = (window as any).monaco;
+    const model = this.monacoEditor?.getModel();
+
+    if (monacoGlobal && model) {
+      monacoGlobal.editor.setModelLanguage(model, language);
+    }
+  }
+
   ngOnInit(): void {
     // console.log('WorkEditorComponent initialized with workID:', this.workID);
     this.userDetails = this.userDetailsService.userDetails;
 
     // Connect to signalR hub
-    this.workRealitimeService.startConnection();
-
-    // Subscribe to real-time events
-    this.subscribeToRealtimeWorkEvents();
+    this.workRealitimeService.startConnection().then(() => {
+      // Subscribe to real-time events
+      this.subscribeToRealtimeWorkEvents();
+      this.workRealitimeService.joinWork(this.workID, this.userDetails?.UserID as string, this.userDetails?.UserName as string);
+    });
 
     // Debounce code & cursor changes
     this.codeChange$.pipe(debounceTime(300)).subscribe(code => {
@@ -63,8 +85,6 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
       this.workRealitimeService.updateCursor(this.workID, position, lineNumber);
     });
 
-    this.workRealitimeService.joinWork(this.workID, this.userDetails?.UserID as string, this.userDetails?.UserName as string);
-
     this.autoSaveInterval = setInterval(() => {
 
     }, 30000) // Auto-save every 30 seconds
@@ -75,7 +95,8 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
     this.workRealitimeService.workLoaded$.subscribe(data => {
       this.work = data;
       this.currentCode = data.code;
-      this.editorOptions = { ...this.editorOptions, language: data.language };
+      // this.editorOptions.language = data.language;
+      // this.setEditorLanguage(data.language.toLowerCase());
     })
 
     // Code updated by other users
@@ -147,5 +168,15 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.autoSaveInterval) {
+      clearInterval(this.autoSaveInterval);
+    }
+
+    this.workRealitimeService.leaveWork(this.workID, this.userDetails?.UserID as string, this.userDetails?.UserName as string);
+    // this.workRealitimeService.stopConnection();
+  }
+
+  showEditorOptions(){
+    console.log('Editor options: ', this.editorOptions);
   }
 }

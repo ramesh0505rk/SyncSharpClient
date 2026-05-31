@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../Environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Work, WorkDetail, CreateWork, UpdateWork, User, GeneralResponse } from '../Models/work.model';
+import { Work, WorkDetail, CreateWork, UpdateWork, User, WorkVersion, GeneralResponse } from '../Models/work.model';
 
 @Injectable({
   providedIn: 'root'
@@ -37,10 +37,10 @@ export class WorkService {
     return this.http.delete(`${this.restApiUrl}/Work/DeleteWork/${workID}`);
   }
 
-  // Versions (Later)
-  // getWorkVersions(id: number, limit: number = 20): Observable<WorkVersion[]> {
-  //   return this.http.get<WorkVersion[]>(`${this.baseUrl}/${id}/versions?limit=${limit}`);
-  // }
+  // Versions
+  getWorkVersions(workID: string, limit: number = 20): Observable<WorkVersion[]> {
+    return this.http.get<WorkVersion[]>(`${this.restApiUrl}/Work/${workID}/versions?limit=${limit}`);
+  }
 
   // Members
   getMembers(workID: string): Observable<User[]> {

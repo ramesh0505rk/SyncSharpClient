@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { UserDetails, UserDetailsService } from '../services/user-details.service';
 import { Router, RouterOutlet } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -21,7 +21,9 @@ export class HomeComponent implements OnInit {
   workLoaded: boolean = true;
 
   constructor(private userDetailsService: UserDetailsService, private router: Router,
-    private modalService: NgbModal, private workDetailsService: WorkDetailsService) {
+    private modalService: NgbModal, private workDetailsService: WorkDetailsService,
+    private cdr: ChangeDetectorRef
+  ) {
   }
 
   ngOnInit(): void {
@@ -41,6 +43,7 @@ export class HomeComponent implements OnInit {
 
     this.workDetailsService.workLoaded$.subscribe(loaded => {
       this.workLoaded = loaded;
+      this.cdr.detectChanges();
     })
 
     this.setupProfileSelect();

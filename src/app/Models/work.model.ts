@@ -46,3 +46,12 @@ export interface GeneralResponse<T> {
     requestId: string;
     responseMessage: string;
 }
+
+export interface WorkVersion {
+  versionID: number;
+  workID: string;
+  code: string;
+  modifiedBy: string;
+  modifiedAt: Date;
+  changeDescription: string;
+}
