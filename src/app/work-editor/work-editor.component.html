@@ -1,7 +1,7 @@
 <div class="work-editor-container">
     <div class="editor-wrapper">
-        <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="currentCode" (onInit)="onEditorInit($event)" (ngModelChange)="onCodeChange($event)"
-            style="width: 600px; height: 600px;">
+        <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="currentCode" (onInit)="onEditorInit($event)"
+            (ngModelChange)="onCodeChange($event)">
         </ngx-monaco-editor>
     </div>
     <button class="btn btn-primary" (click)="showEditorOptions()">

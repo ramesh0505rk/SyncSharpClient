@@ -1,7 +1,7 @@
 <div class="work-list-container">
     <div class="row m-0">
         <div *ngFor="let work of workList" class="col-lg-3 col-md-4 col-sm-6 p-2 work-items">
-            <div (click)="loadWork(work.workID)" class="work-item d-flex flex-column justify-content-between gap-5">
+            <div (click)="loadWork(work.workID, work.language)" class="work-item d-flex flex-column justify-content-between gap-5">
                 <div>
                     <h3 class="truncate-title">{{ work.title }}</h3>
                     <p class="truncate-description">{{ work.description }}</p>

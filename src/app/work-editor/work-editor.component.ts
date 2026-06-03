@@ -31,15 +31,7 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
   monacoEditor: any;
 
   // Monoco editor object
-  editorOptions = {
-    theme: 'vs-dark',
-    language: 'java',
-    automaticLayout: true,
-    minimap: { enabled: false },
-    fontSize: 14,
-    lineNumbers: 'on',
-    dragAndDrop: true,
-  }
+  editorOptions: any;
 
   // Subjects for real-time events
   private codeChange$ = new Subject<string>();
@@ -51,20 +43,65 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
 
   onEditorInit(editor: any) {
     this.monacoEditor = editor;
-  }
-
-  setEditorLanguage(language: string) {
-    this.editorOptions.language = language;
 
     const monacoGlobal = (window as any).monaco;
-    const model = this.monacoEditor?.getModel();
 
-    if (monacoGlobal && model) {
-      monacoGlobal.editor.setModelLanguage(model, language);
-    }
+    monacoGlobal.editor.defineTheme('myTheme', {
+      base: 'vs-dark', // based on vs-dark
+      inherit: true,   // inherit all vs-dark rules
+      rules: [],
+      colors: {
+        'editor.background': '#111111', // your custom background
+        'editor.lineHighlightBackground': '#161b22',
+        'editorLineNumber.activeForeground': '#a6aaf8', // current line number
+        'editorLineNumber.foreground': '#4a4a4a',
+        'editorCursor.foreground': '#a6aaf8',
+
+
+        // Search/Find matches (later)
+        // 'editor.findMatchBackground': '#a6aaf8',
+        // 'editor.findMatchHighlightBackground': '#f6b73c30',
+
+        // 'scrollbarSlider.background': '#a6aaf8da',
+        // 'scrollbarSlider.hoverBackground': '#a6aaf8aa',
+        // 'scrollbarSlider.activeBackground': '#a6aaf8aa',
+
+        // Later
+        // Indent guides (the vertical lines)
+        // 'editorIndentGuide.background': '#a6aaf8',
+        // 'editorIndentGuide.activeBackground': '#a6aaf8',
+
+        // Brackets matching highlight
+        // 'editorBracketMatch.background': '#264f7850',
+        // 'editorBracketMatch.border': '#264f78',
+
+        // Suggestions/Autocomplete popup
+        // 'editorSuggestWidget.background': '#1e1e1e',
+        // 'editorSuggestWidget.border': '#3a3a3a',
+        // 'editorSuggestWidget.selectedBackground': '#264f78',
+
+        // Errors and warnings underline
+        // 'editorError.foreground': '#ff5555',
+        // 'editorWarning.foreground': '#f6b73c',
+      }
+    });
+
+    monacoGlobal.editor.setTheme('myTheme');
   }
 
   ngOnInit(): void {
+
+    const language = history.state.language;
+    this.editorOptions = {
+      theme: 'vs-dark',
+      language: language,
+      automaticLayout: true,
+      minimap: { enabled: false },
+      fontSize: 14,
+      lineNumbers: true,
+      dragAndDrop: true
+    }
+
     // console.log('WorkEditorComponent initialized with workID:', this.workID);
     this.userDetails = this.userDetailsService.userDetails;
 
@@ -95,8 +132,6 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
     this.workRealitimeService.workLoaded$.subscribe(data => {
       this.work = data;
       this.currentCode = data.code;
-      // this.editorOptions.language = data.language;
-      // this.setEditorLanguage(data.language.toLowerCase());
     })
 
     // Code updated by other users
@@ -176,7 +211,7 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
     // this.workRealitimeService.stopConnection();
   }
 
-  showEditorOptions(){
+  showEditorOptions() {
     console.log('Editor options: ', this.editorOptions);
   }
 }

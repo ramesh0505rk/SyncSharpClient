@@ -54,7 +54,7 @@ export class WorkListComponent implements OnInit {
     });
   }
 
-  loadWork(workID: string) {
-    this.router.navigate(['/work', workID]);
+  loadWork(workID: string, language: string) {
+    this.router.navigate(['/work', workID], { state: { language } });
   }
 }

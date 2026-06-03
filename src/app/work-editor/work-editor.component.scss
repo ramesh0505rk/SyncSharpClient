@@ -1,5 +1,19 @@
-.work-editor-container{
+.work-editor-container {
     height: 100vh;
     background-color: var(--primary-background);
     overflow: auto;
+}
+
+.editor-wrapper {
+    margin-top: 20px;
+    border-radius: 12px;
+    overflow: hidden; /* this is the key — clips the editor to the border radius */
+    border: 1px solid #3a3a3a;
+    width: 600px;
+    height: 600px;
+}
+
+.editor-wrapper ngx-monaco-editor {
+    width: 100%;
+    height: 100%;
 }
