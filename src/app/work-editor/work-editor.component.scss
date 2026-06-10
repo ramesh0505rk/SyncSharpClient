@@ -4,16 +4,58 @@
     overflow: auto;
 }
 
+.top-bar-container {
+    height: 14vh;
+    padding: 0 2vh;
+}
+
+.top-bar-inner {
+    height: 10vh;
+    border-radius: 15px;
+
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgb(128, 128, 128, 0.2);
+    padding: 1rem;
+}
+
+.workspace-container {
+    flex: 1;
+    padding: 0 2vh 2vh 2vh;
+    // background-color: red;
+}
+
 .editor-wrapper {
-    margin-top: 20px;
     border-radius: 12px;
     overflow: hidden; /* this is the key — clips the editor to the border radius */
     border: 1px solid #3a3a3a;
-    width: 600px;
-    height: 600px;
+    min-width: 300px;
+    max-width: 1000px;
+    height: 100%;
 }
 
 .editor-wrapper ngx-monaco-editor {
     width: 100%;
     height: 100%;
+}
+
+.output-container {
+    flex: 1;
+    height: 100%;
+    border-radius: 12px;
+    border: 1px solid #3a3a3a;
+}
+
+.divider {
+    width: 5px;
+    height: 20%;
+    background: #3a3a3a;
+    cursor: col-resize;
+    transition: background 0.2s, height 0.2s;
+    border-radius: 5px;
+}
+
+.divider:hover, .divider.isDragging {
+    background: #a6aaf8; /* highlight on hover like VS Code */
+    height: 30%;
 }

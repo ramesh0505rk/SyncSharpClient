@@ -1,10 +1,21 @@
-<div class="work-editor-container">
-    <div class="editor-wrapper">
-        <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="currentCode" (onInit)="onEditorInit($event)"
-            (ngModelChange)="onCodeChange($event)">
-        </ngx-monaco-editor>
+<div class="work-editor-container d-flex flex-column">
+    <div class="top-bar-container d-flex w-100 justify-content-center align-items-center">
+        <div class="top-bar-inner w-100">
+
+        </div>
     </div>
-    <button class="btn btn-primary" (click)="showEditorOptions()">
+    <div class="workspace-container d-flex align-items-center gap-1">
+        <div class="editor-wrapper" [style.width.px]="editorWidth">
+            <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="currentCode" (onInit)="onEditorInit($event)"
+                (ngModelChange)="onCodeChange($event)">
+            </ngx-monaco-editor>
+        </div>
+        <div class="divider" [ngClass]="{'isDragging': isDragging}" (mousedown)="onDragging($event)"></div>
+        <div class="output-container">
+
+        </div>
+    </div>
+    <!-- <button class="btn btn-primary" (click)="showEditorOptions()">
         Show editor options
-    </button>
+    </button> -->
 </div>

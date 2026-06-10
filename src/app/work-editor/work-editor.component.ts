@@ -38,6 +38,12 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
   private cursorChange$ = new Subject<number>();
   private autoSaveInterval: any;
 
+  // Split view event variables
+  editorWidth: number = 700 // Initial width of the editor
+  public isDragging: boolean = false; // is the user currently dragging?
+  private startX: number = 0; // where did the mouse START when drag began
+  private startWidth: number = 0; // what was the editor panel width when drag began
+
   constructor(private workRealitimeService: WorkRealtimeService, private workService: WorkService,
     private userDetailsService: UserDetailsService) { }
 
@@ -200,6 +206,28 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
   calculateLineNumber(position: number): number {
     const textBeforeCursor = this.currentCode.substring(0, position);
     return (textBeforeCursor.match(/\n/g) || []).length + 1;
+  }
+
+  // Handling split view and resizing events
+  onDragging(event: MouseEvent) {
+    this.isDragging = true;
+    this.startX = event.clientX;
+    this.startWidth = this.editorWidth;
+
+    document.addEventListener('mousemove', this.onMouseMove);
+    document.addEventListener('mouseup', this.onMouseUp);
+  }
+
+  private onMouseMove = (element: MouseEvent) => {
+    if (!this.isDragging) return;
+    const deltaX = element.clientX - this.startX;
+    this.editorWidth = this.startWidth + deltaX;
+  }
+
+  private onMouseUp = () => {
+    this.isDragging = false;
+    document.removeEventListener('mousemove', this.onMouseMove);
+    document.removeEventListener('mouseup', this.onMouseUp);
   }
 
   ngOnDestroy(): void {

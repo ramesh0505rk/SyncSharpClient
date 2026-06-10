@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { UserDetails, UserDetailsService } from '../services/user-details.service';
 import { Router, RouterOutlet } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -13,12 +13,14 @@ import { CommonModule } from '@angular/common';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   private btns!: NodeListOf<HTMLButtonElement>;
   private bubble!: HTMLElement | null;
+  private resizeListener = () => this.setScrollbarState();
   userDetails: UserDetails | null = null;
   profileLetter: string = '';
   workLoaded: boolean = true;
+  hasScrollbar = false;
 
   constructor(private userDetailsService: UserDetailsService, private router: Router,
     private modalService: NgbModal, private workDetailsService: WorkDetailsService,
@@ -34,8 +36,15 @@ export class HomeComponent implements OnInit {
       btn.addEventListener('click', () => { this.moveBubble(i) });
     })
 
-    window.addEventListener('load', () => { this.moveBubble(0) });
-    setTimeout(() => this.moveBubble(0), 50);
+    window.addEventListener('load', () => {
+      this.moveBubble(0);
+      this.setScrollbarState();
+    });
+    window.addEventListener('resize', this.resizeListener);
+    setTimeout(() => {
+      this.moveBubble(0);
+      this.setScrollbarState();
+    }, 50);
 
     // Subscribe to user details
     this.userDetails = this.userDetailsService.userDetails;
@@ -102,5 +111,15 @@ export class HomeComponent implements OnInit {
     localStorage.removeItem('accessToken');
     this.userDetailsService.setUserDetails(null);
     this.router.navigate(['/signin']);
+  }
+
+  private setScrollbarState(): void {
+    const container = document.querySelector('.home-container') as HTMLElement | null;
+    this.hasScrollbar = !!container && container.scrollHeight > container.clientHeight;
+    this.cdr.detectChanges();
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.resizeListener);
   }
 }
