@@ -39,7 +39,7 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
   private autoSaveInterval: any;
 
   // Split view event variables
-  editorWidth: number = 700 // Initial width of the editor
+  editorWidth: number = 900 // Initial width of the editor
   public isDragging: boolean = false; // is the user currently dragging?
   private startX: number = 0; // where did the mouse START when drag began
   private startWidth: number = 0; // what was the editor panel width when drag began
@@ -220,8 +220,10 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
 
   private onMouseMove = (element: MouseEvent) => {
     if (!this.isDragging) return;
-    const deltaX = element.clientX - this.startX;
-    this.editorWidth = this.startWidth + deltaX;
+    if (element.clientX > 300 && element.clientX < 1000) {
+      const deltaX = element.clientX - this.startX;
+      this.editorWidth = this.startWidth + deltaX;
+    }
   }
 
   private onMouseUp = () => {

@@ -1,10 +1,21 @@
 // Common styles and variables for the application
 
-// <-- Icons --> 
+// <-- Icons -->
 $right-arrow: url("../icons/right-arrow.svg");
 $right-arrow-white: url("../icons/right-arrow-white.svg");
-// <-- Icons --> 
+// <-- Icons -->
 
 // <-- Colors -->
 $primary-color: #1d791d;
 // <-- Colors -->
+
+.gradient-text {
+    // display: inline-block;
+    color: transparent;
+    background: linear-gradient(45deg, #f8aac0, #a6aaf8);
+    background-clip: text;
+}
+
+.block-select {
+    user-select: none;
+}

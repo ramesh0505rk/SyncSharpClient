@@ -5,14 +5,37 @@
         </div>
     </div>
     <div class="workspace-container d-flex align-items-center gap-1">
-        <div class="editor-wrapper" [style.width.px]="editorWidth">
-            <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="currentCode" (onInit)="onEditorInit($event)"
-                (ngModelChange)="onCodeChange($event)">
-            </ngx-monaco-editor>
+        <div class="editor-wrapper d-flex flex-column" [style.width.px]="editorWidth">
+            <div class="editor-header d-flex align-items-center justify-content-between">
+                <div class="title-container d-flex flex-column">
+                    <p class="m-0 gradient-text block-select" style="font-weight: 900;">
+                        {{work?.title}}</p>
+                    <small class="m-0" style="color: #ffffffb3; font-size: 12px;"><span
+                            style="font-weight: 600;color: #a6aaf8;">Language:</span> {{
+                        work?.language }}</small>
+                </div>
+                <div class="btn-container">
+                    <button class="save-btn d-flex justify-content-center align-items-center" (click)="saveWork()">
+                        <img src="assets/icons/save.svg" alt="Create Work" style="width: 1.2rem; height: 1.2rem;margin-left: 1px;">
+                    </button>
+                </div>
+            </div>
+            <div class="editor-container">
+                <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="currentCode" (onInit)="onEditorInit($event)"
+                    (ngModelChange)="onCodeChange($event)">
+                </ngx-monaco-editor>
+            </div>
         </div>
         <div class="divider" [ngClass]="{'isDragging': isDragging}" (mousedown)="onDragging($event)"></div>
-        <div class="output-container">
-
+        <div class="output-container d-flex flex-column">
+            <div class="header-container d-flex align-items-center justify-content-between">
+                <p class="m-0 gradient-text block-select" style="font-weight: 900;">Output</p>
+                <button class="run-btn d-flex justify-content-center align-items-center">
+                    <img src="assets/icons/run.svg" alt="Create Work" style="width: 1rem; height: 1rem;margin-left: 2px;">
+                </button>
+            </div>
+            <div class="output-content">
+            </div>
         </div>
     </div>
     <!-- <button class="btn btn-primary" (click)="showEditorOptions()">

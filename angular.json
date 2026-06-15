@@ -37,6 +37,7 @@
             "styles": [
               "src/styles.scss",
               "src/theme.scss",
+              "src/assets/styles/commonStyles.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": []
