@@ -37,6 +37,7 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
   private codeChange$ = new Subject<string>();
   private cursorChange$ = new Subject<number>();
   private autoSaveInterval: any;
+  private isRemoteUpdate: boolean = false; // Flag to prevent echo-loop on remote code updates
 
   // Split view event variables
   editorWidth: number = 900 // Initial width of the editor
@@ -142,8 +143,33 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
 
     // Code updated by other users
     this.workRealitimeService.codeUpdated$.subscribe(data => {
-      if (data.updatedBy !== this.userDetails?.UserID) {
-        this.currentCode = data.code;
+      if (this.currentCode === data.code) {
+        return;
+      }
+
+      const editor = this.monacoEditor;
+      const currentModel = editor?.getModel();
+      const savedPosition = editor?.getPosition();
+      const savedOffset = (currentModel && savedPosition) ? currentModel.getOffsetAt(savedPosition) : 0;
+
+      this.isRemoteUpdate = true; // Suppress echo: don't re-broadcast this change
+      this.currentCode = data.code;
+
+      // Restore cursor by character offset after remote text is applied to the editor model.
+      if (editor) {
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            const updatedModel = editor.getModel();
+            if (!updatedModel) {
+              return;
+            }
+
+            const safeOffset = Math.min(savedOffset, updatedModel.getValueLength());
+            const restoredPosition = updatedModel.getPositionAt(safeOffset);
+            editor.setPosition(restoredPosition);
+            editor.revealPositionInCenterIfOutsideViewport(restoredPosition);
+          });
+        }, 0);
       }
     })
 
@@ -177,6 +203,10 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
 
   onCodeChange(newCode: string) {
     this.currentCode = newCode;
+    if (this.isRemoteUpdate) {
+      this.isRemoteUpdate = false; // Reset flag, skip broadcasting the remote change back
+      return;
+    }
     this.codeChange$.next(newCode);
   }
 
@@ -238,7 +268,6 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
     }
 
     this.workRealitimeService.leaveWork(this.workID, this.userDetails?.UserID as string, this.userDetails?.UserName as string);
-    // this.workRealitimeService.stopConnection();
   }
 
   showEditorOptions() {

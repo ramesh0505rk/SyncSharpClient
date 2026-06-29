@@ -17,7 +17,7 @@ export class WorkRealtimeService {
   public codeUpdated$ = new Subject<{ code: string; cursorPosition: number; updatedBy: string }>();
   public userJoined$ = new Subject<{ userID: string; username: string; connectionID: string }>();
   public userLeft$ = new Subject<{ userID: string; username: string; connectionID: string }>();
-  public userDisconnected$ = new Subject<{ userID: string; username: string; workID: string }>();
+  public userDisconnected$ = new Subject<{ userID: string; connectionID: string; username: string; workID: string }>();
   public activeUsers$ = new Subject<ActiveUser[]>();
   public cursorMoved$ = new Subject<{ connectionID: string; cursorPosition: number; lineNumber: number }>();
   public snapshotSaved$ = new Subject<{ workID: string; savedBy: string }>();
@@ -136,16 +136,20 @@ export class WorkRealtimeService {
   public leaveWork(workID: string, userID: string, username: string) {
     if (!this.isConnected) return;
 
-    this.hubConnection.invoke('LeaveWork', workID, userID, username)
+    this.hubConnection.invoke('LeaveWork', workID, userID, username).then(() => {
+      console.log('Left work successfully');
+      this.stopConnection(); // Stop the connection after leaving the work
+    })
       .catch(err => console.error('Error while leaving work: ', err));
   }
 
   // Stop connection
   public stopConnection() {
     if (this.hubConnection) {
-      this.hubConnection.stop();
-      this.isConnected = false;
-      console.log('SignalR connection stopped');
+      this.hubConnection.stop().then(() => {
+        this.isConnected = false;
+        console.log('SignalR connection stopped');
+      }).catch(err => console.error('Error while stopping connection: ', err));
     }
   }
 }
