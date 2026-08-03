@@ -48,10 +48,18 @@ export interface GeneralResponse<T> {
 }
 
 export interface WorkVersion {
-  versionID: number;
-  workID: string;
-  code: string;
-  modifiedBy: string;
-  modifiedAt: Date;
-  changeDescription: string;
+    versionID: number;
+    workID: string;
+    code: string;
+    modifiedBy: string;
+    modifiedAt: Date;
+    changeDescription: string;
+}
+
+export interface CodeOperation {
+    workID: string;
+    offset: number;
+    length: number;
+    text: string;
+    userID: string;
 }

@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { WorkRealtimeService } from '../services/work-realtime.service';
 import { WorkService } from '../services/work.service';
 import { UserDetails, UserDetailsService } from '../services/user-details.service';
-import { ActiveUser, UpdateWork, WorkDetail } from '../Models/work.model';
+import { ActiveUser, CodeOperation, UpdateWork, WorkDetail } from '../Models/work.model';
 import { debounceTime, Subject } from 'rxjs';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { CommonModule } from '@angular/common';
@@ -34,10 +34,10 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
   editorOptions: any;
 
   // Subjects for real-time events
-  private codeChange$ = new Subject<string>();
   private cursorChange$ = new Subject<number>();
   private autoSaveInterval: any;
   private isRemoteUpdate: boolean = false; // Flag to prevent echo-loop on remote code updates
+  private isApplyingRemoteEdit: boolean = false; // Flag to prevent echo-loop on remote code updates
 
   // Split view event variables
   editorWidth: number = 900 // Initial width of the editor
@@ -94,6 +94,30 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
     });
 
     monacoGlobal.editor.setTheme('myTheme');
+
+    // this.monacoEditor.onDidChangeCursorPosition((e: any) => {
+    //   console.log('Direct ', e);
+    // });
+
+    const editors = this.monacoEditor;
+    const model = editors?.getModel();
+
+    model?.onDidChangeContent((e: any) => {
+      // console.log('Model ', e.changes);
+      if (this.isApplyingRemoteEdit) return;
+
+      e.changes.forEach((change: any) => {
+        const codeOperation: CodeOperation = {
+          workID: this.workID,
+          offset: change?.rangeOffset,
+          length: change?.rangeLength,
+          text: change?.text,
+          userID: this.userDetails?.UserID as string
+        }
+
+        this.workRealitimeService.sendCodeOperation(codeOperation);
+      });
+    });
   }
 
   ngOnInit(): void {
@@ -120,9 +144,9 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
     });
 
     // Debounce code & cursor changes
-    this.codeChange$.pipe(debounceTime(300)).subscribe(code => {
-      this.workRealitimeService.updateCode(this.workID, code, this.cursorPosition);
-    });
+    // this.codeChange$.pipe(debounceTime(300)).subscribe(code => {
+    //   this.workRealitimeService.updateCode(this.workID, code, this.cursorPosition);
+    // });
 
     this.cursorChange$.pipe(debounceTime(300)).subscribe(position => {
       const lineNumber = this.calculateLineNumber(position);
@@ -139,39 +163,75 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
     this.workRealitimeService.workLoaded$.subscribe(data => {
       this.work = data;
       this.currentCode = data.code;
-    })
-
-    // Code updated by other users
-    this.workRealitimeService.codeUpdated$.subscribe(data => {
-      if (this.currentCode === data.code) {
-        return;
-      }
 
       const editor = this.monacoEditor;
-      const currentModel = editor?.getModel();
-      const savedPosition = editor?.getPosition();
-      const savedOffset = (currentModel && savedPosition) ? currentModel.getOffsetAt(savedPosition) : 0;
+      const model = editor?.getModel();
 
-      this.isRemoteUpdate = true; // Suppress echo: don't re-broadcast this change
-      this.currentCode = data.code;
-
-      // Restore cursor by character offset after remote text is applied to the editor model.
-      if (editor) {
-        setTimeout(() => {
-          requestAnimationFrame(() => {
-            const updatedModel = editor.getModel();
-            if (!updatedModel) {
-              return;
-            }
-
-            const safeOffset = Math.min(savedOffset, updatedModel.getValueLength());
-            const restoredPosition = updatedModel.getPositionAt(safeOffset);
-            editor.setPosition(restoredPosition);
-            editor.revealPositionInCenterIfOutsideViewport(restoredPosition);
-          });
-        }, 0);
+      if (model) {
+        model.setValue(data.code);
       }
     })
+
+    this.workRealitimeService.codeOperation$.subscribe(operation => {
+      console.log('Received code operation: ', operation);
+
+      const editor = this.monacoEditor;
+      const model = editor?.getModel();
+
+      if (!editor || !model) return;
+
+      this.isApplyingRemoteEdit = true; // Suppress echo: don't re-broadcast this change
+
+      const start = model.getPositionAt(operation.offset);
+      const end = model.getPositionAt(operation.offset + operation.length);
+
+      const range = new (window as any).monaco.Range(
+        start.lineNumber,
+        start.column,
+        end.lineNumber,
+        end.column
+      );
+
+      editor.executeEdits('remote', [{
+        range: range,
+        text: operation.text
+      }]);
+
+      this.currentCode = model.getValue();
+      this.isApplyingRemoteEdit = false; // Reset flag after applying remote edit
+    });
+
+    // Code updated by other users
+    // this.workRealitimeService.codeUpdated$.subscribe(data => {
+    //   if (this.currentCode === data.code) {
+    //     return;
+    //   }
+
+    //   const editor = this.monacoEditor;
+    //   const currentModel = editor?.getModel();
+    //   const savedPosition = editor?.getPosition();
+    //   const savedOffset = (currentModel && savedPosition) ? currentModel.getOffsetAt(savedPosition) : 0;
+
+    //   this.isRemoteUpdate = true; // Suppress echo: don't re-broadcast this change
+    //   this.currentCode = data.code;
+
+    //   // Restore cursor by character offset after remote text is applied to the editor model.
+    //   if (editor) {
+    //     setTimeout(() => {
+    //       requestAnimationFrame(() => {
+    //         const updatedModel = editor.getModel();
+    //         if (!updatedModel) {
+    //           return;
+    //         }
+
+    //         const safeOffset = Math.min(savedOffset, updatedModel.getValueLength());
+    //         const restoredPosition = updatedModel.getPositionAt(safeOffset);
+    //         editor.setPosition(restoredPosition);
+    //         editor.revealPositionInCenterIfOutsideViewport(restoredPosition);
+    //       });
+    //     }, 0);
+    //   }
+    // })
 
     // Active users list
     this.workRealitimeService.activeUsers$.subscribe(activeUsers => {
@@ -201,14 +261,14 @@ export class WorkEditorComponent implements OnInit, OnDestroy {
     })
   }
 
-  onCodeChange(newCode: string) {
-    this.currentCode = newCode;
-    if (this.isRemoteUpdate) {
-      this.isRemoteUpdate = false; // Reset flag, skip broadcasting the remote change back
-      return;
-    }
-    this.codeChange$.next(newCode);
-  }
+  // onCodeChange(newCode: string) {
+  //   this.currentCode = newCode;
+  //   if (this.isRemoteUpdate) {
+  //     this.isRemoteUpdate = false; // Reset flag, skip broadcasting the remote change back
+  //     return;
+  //   }
+  //   this.codeChange$.next(newCode);
+  // }
 
   onCursorChange(newPosition: number) {
     this.cursorPosition = newPosition;

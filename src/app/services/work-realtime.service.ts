@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { environment } from '../Environments/environment';
 import { Subject } from 'rxjs';
-import { ActiveUser } from '../Models/work.model';
+import { ActiveUser, CodeOperation } from '../Models/work.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,8 @@ export class WorkRealtimeService {
 
   // Observables for real-time events
   public workLoaded$ = new Subject<any>();
-  public codeUpdated$ = new Subject<{ code: string; cursorPosition: number; updatedBy: string }>();
+  // public codeUpdated$ = new Subject<{ code: string; cursorPosition: number; updatedBy: string }>();
+  public codeOperation$ = new Subject<CodeOperation>();
   public userJoined$ = new Subject<{ userID: string; username: string; connectionID: string }>();
   public userLeft$ = new Subject<{ userID: string; username: string; connectionID: string }>();
   public userDisconnected$ = new Subject<{ userID: string; connectionID: string; username: string; workID: string }>();
@@ -57,8 +58,13 @@ export class WorkRealtimeService {
     });
 
     // Code updated by another user
-    this.hubConnection.on('CodeUpdated', (data) => {
-      this.codeUpdated$.next(data);
+    // this.hubConnection.on('CodeUpdated', (data) => {
+    //   this.codeUpdated$.next(data);
+    // });
+
+    // Code updated by another user (operation)
+    this.hubConnection.on('CodeOperation', (data) => {
+      this.codeOperation$.next(data);
     });
 
     // User joined
@@ -109,11 +115,19 @@ export class WorkRealtimeService {
   }
 
   // Send code update real-time
-  public updateCode(workID: string, code: string, cursorPosition: number) {
+  // public updateCode(workID: string, code: string, cursorPosition: number) {
+  //   if (!this.isConnected) return;
+
+  //   this.hubConnection.invoke('UpdateCode', workID, code, cursorPosition)
+  //     .catch(err => console.error('Error while updating code: ', err));
+  // }
+
+  // Send code operation real-time
+  public sendCodeOperation(codeOperation: CodeOperation) {
     if (!this.isConnected) return;
 
-    this.hubConnection.invoke('UpdateCode', workID, code, cursorPosition)
-      .catch(err => console.error('Error while updating code: ', err));
+    this.hubConnection.invoke('UpdateOperation', codeOperation)
+      .catch(err => console.error('Error while sending code operation: ', err));
   }
 
   // Save snapshot (manual or auto-save)
